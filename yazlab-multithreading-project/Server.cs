@@ -29,5 +29,6 @@ namespace yazlab_multithreading_project
         public bool IsAvaible { get; set; }
         public CancellationTokenSource CancellationToken { get; set; }
         public ProgressBar ProgressBar { get; set; }
+        public ServerProgressBar ServerProgressBar { get; set; }
     }
 }

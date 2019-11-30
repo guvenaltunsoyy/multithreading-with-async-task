@@ -7,3 +7,4 @@ C:\Users\guven\source\repos\yazlab-multithreading-project\yazlab-multithreading-
 C:\Users\guven\source\repos\yazlab-multithreading-project\yazlab-multithreading-project\obj\Debug\yazlab-multithreading-project.exe
 C:\Users\guven\source\repos\yazlab-multithreading-project\yazlab-multithreading-project\obj\Debug\yazlab-multithreading-project.pdb
 C:\Users\guven\source\repos\yazlab-multithreading-project\yazlab-multithreading-project\obj\Debug\yazlab_multithreading_project.Form1.resources
+C:\Users\guven\source\repos\yazlab-multithreading-project\yazlab-multithreading-project\obj\Debug\yazlab_multithreading_project.ServerProgressBar.resources
