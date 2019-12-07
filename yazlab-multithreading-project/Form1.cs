@@ -38,33 +38,17 @@ namespace yazlab_multithreading_project
             {
                 RequestCount = 10,
                 IsAvaible = true,
-                Capacity = 1000,
+                Capacity = 5000,
                 CancellationToken = new CancellationTokenSource(),
-                ProgressBar = new ProgressBar()
-                {
-                    Minimum = 0,
-                    Maximum = 1000,
-                    Tag = "Sub Server",
-                    Width = 150,
-                    Value = 10,
-                },
-                ServerProgressBar = new ServerProgressBar(0, 0, 1000, "Sub Server 1")
+                ServerProgressBar = new ServerProgressBar(0, 0, 5000, "Sub Server 1")
             });
             SubServers.Add(new Server()
             {
-                Capacity = 1000,
+                Capacity = 5000,
                 IsAvaible = true,
                 RequestCount = 10,
                 CancellationToken = new CancellationTokenSource(),
-                ProgressBar = new ProgressBar()
-                {
-                    Minimum = 0,
-                    Maximum = 1000,
-                    Tag = "Sub Server",
-                    Value = 10,
-                    Width = 150,
-                },
-                ServerProgressBar = new ServerProgressBar(0, 0, 1000, "Sub Server 2"),
+                ServerProgressBar = new ServerProgressBar(0, 0, 5000, "Sub Server 2"),
             });
 
             cancellationToken = new CancellationTokenSource();
@@ -72,9 +56,10 @@ namespace yazlab_multithreading_project
             MainServer = new Server()
             {
                 IsAvaible = true,
-                Capacity = 2000,
+                Capacity = 10000,
                 RequestCount = 0,
-                CancellationToken = new CancellationTokenSource()
+                CancellationToken = new CancellationTokenSource(),
+                ServerProgressBar = new ServerProgressBar(0, 0, 10000, "Main Server"),
             };
             RichTextBox richTextBox = myConsole;
             RichTextBox richTextBox2 = myConsole2;
@@ -89,12 +74,14 @@ namespace yazlab_multithreading_project
             {
                 myFlow2.Invoke(new Action(() =>
                 {
+                    myFlow2.Controls.Add(MainServer.ServerProgressBar);
                     myFlow2.Controls.Add(SubServers[0].ServerProgressBar);
                     myFlow2.Controls.Add(SubServers[1].ServerProgressBar);
                 }));
             }
             else
             {
+                myFlow2.Controls.Add(MainServer.ServerProgressBar);
                 myFlow2.Controls.Add(SubServers[0].ServerProgressBar);
                 myFlow2.Controls.Add(SubServers[1].ServerProgressBar);
             }
@@ -121,9 +108,11 @@ namespace yazlab_multithreading_project
         }
         public async Task AddRequestToMainServer()
         {
+            Console.WriteLine("ADDTOMAINSERVER");
             int req = 0;
             TotalRequest = 0;
             Random randomNumber = new Random();
+            decimal percentageMain;
             Task addRequest = Task.Factory.StartNew(async () =>
             {
                 while (true)
@@ -136,8 +125,10 @@ namespace yazlab_multithreading_project
                     MainServer.CancellationToken.Token.ThrowIfCancellationRequested();
                     MainServer.RequestCount += req;
                     TotalRequest += req;
+                    percentageMain = ((Convert.ToDecimal(MainServer.RequestCount) / MainServer.Capacity) * 100);
+                    MainServer.ServerProgressBar.ChangeValues(MainServer.RequestCount, percentageMain);
                     lblTotalRequest.Invoke(new Action(() => lblTotalRequest.Text = "Total Request: " + TotalRequest.ToString()));
-                    myConsole.Invoke(new Action(() => myConsole.AppendText("Main Server Request: " + MainServer.RequestCount.ToString() + "\n")));
+                    myConsole.Invoke(new Action(() => myConsole.AppendText("Main Server Request: " + req.ToString() + "\n")));
                     await Task.Delay(100);
                 }
             }
@@ -151,6 +142,7 @@ namespace yazlab_multithreading_project
                     if (MainServer.RequestCount <= 0)
                     {
                         MainServer.RequestCount = 0;
+                        MainServer.ServerProgressBar.ChangeValues(0, 0);
                         myConsole.Invoke(new Action(() => myConsole.AppendText("Main Server Request: " + MainServer.RequestCount.ToString() + "\n")));
                         MainServer.CancellationToken.Cancel();
                     }
@@ -158,6 +150,8 @@ namespace yazlab_multithreading_project
                     MainServer.CancellationToken.Token.ThrowIfCancellationRequested();
                     MainServer.RequestCount -= req;
                     TotalRequest -= req;
+                    myConsole.Invoke(new Action(() => myConsole.AppendText("Main Server Response: " + req.ToString() + "\n")));
+
                 }
             }
             , MainServer.CancellationToken.Token);
@@ -190,8 +184,8 @@ namespace yazlab_multithreading_project
         }
         public async Task CheckSubServerCapacity()
         {
-            UpdateProgressBar();
             Console.WriteLine("CheckSubServer CAPACITY");
+            decimal percentage;
             Task check = Task.Factory.StartNew(async () =>
             {
                 while (true)
@@ -199,6 +193,8 @@ namespace yazlab_multithreading_project
                     cancellationToken.Token.ThrowIfCancellationRequested();
                     SubServers.OrderBy(x => x.RequestCount).ToList().ForEach(async server =>
                      {
+                         percentage = ((Convert.ToDecimal(server.RequestCount) / server.Capacity) * 100);
+                         server.ServerProgressBar.ChangeValues(server.RequestCount > 0 ? server.RequestCount : 0, percentage);
                          if (server.RequestCount >= (server.Capacity * 0.70))
                          {
                              server.IsAvaible = false;
@@ -263,7 +259,6 @@ namespace yazlab_multithreading_project
                             server.RequestCount = 0;
                             return;
                         }
-                        //Console.WriteLine("response sub " + rndm);
                         server.RequestCount -= rndm;
                     });
                     await Task.Delay(500);
@@ -284,15 +279,8 @@ namespace yazlab_multithreading_project
                 IsAvaible = true,
                 RequestCount = requestCount,
                 CancellationToken = new CancellationTokenSource(),
-                Capacity = 1000,
-                ProgressBar = new ProgressBar()
-                {
-                    Minimum = 0,
-                    Maximum = 1000,
-                    Value = requestCount,
-                    Width = 150,
-                },
-                ServerProgressBar = new ServerProgressBar(0, 0, 1000, "Sub Server " + (SubServers.Count + 1)),
+                Capacity = 5000,
+                ServerProgressBar = new ServerProgressBar(0, 0, 5000, "Sub Server " + (SubServers.Count + 1)),
             };
             SubServers.Add(server);
             Console.WriteLine("SUBSERVER CREATED!");
@@ -310,14 +298,12 @@ namespace yazlab_multithreading_project
                 {
                     myFlow2.Invoke(new Action(() =>
                     {
-                        // myFlow2.Controls.Add(server.ProgressBar);
                         myFlow2.Controls.Add(server.ServerProgressBar);
 
                     }));
                 }
                 else
                 {
-                    // myFlow2.Controls.Add(server.ProgressBar);
                     myFlow2.Controls.Add(server.ServerProgressBar);
                 }
             }
@@ -350,7 +336,6 @@ namespace yazlab_multithreading_project
         private void timer1_Tick(object sender, EventArgs e)
         {
             int i = 0;
-            mainServerProgress.Value = MainServer.RequestCount > 0 ? MainServer.RequestCount : 0;
             lblMainServer.Text = "Main Server Request: " + MainServer.RequestCount.ToString();
             LabelSubServer = "Sub Server Count: " + SubServers.Where(x => !x.CancellationToken.IsCancellationRequested).ToList().Count.ToString();
             //myConsole.AppendText("Sub Server Count: " + SubServers.Count.ToString() + "\n");
@@ -367,46 +352,7 @@ namespace yazlab_multithreading_project
             {
 
             }
-            if (UpdateProgressBar().Status != TaskStatus.RanToCompletion)
-            {
-                Console.WriteLine(UpdateProgressBar().Status);
-                UpdateProgressBar().Dispose();
-                UpdateProgressBar();
-            }
         }
-        public async Task UpdateProgressBar()
-        {
-            Task updateProgress = Task.Factory.StartNew(async () =>
-            {
-                while (true)
-                {
-                    cancellationToken.Token.ThrowIfCancellationRequested();
-                    await Task.Delay(100);
-                    SubServers.ForEach(x =>
-                    {
-                        try
-                        {
-                            // x.ProgressBar.Value = x.RequestCount > 0 ? x.RequestCount : 0;
-                            if (x.RequestCount > 0)
-                            {
-                                decimal percentage = ((Convert.ToDecimal(x.RequestCount) / 1000) * 100);
-                                x.ServerProgressBar.ChangeValues(x.RequestCount, percentage);
-                            }
-                            else
-                            {
-                                x.ServerProgressBar.ChangeValues(0, 0);
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            Console.WriteLine("*************UPDATE PROGRES ERROR********************");
-                        }
-                    });
-                }
-            }
-            , cancellationToken.Token);
-        }
-
         private void btnStartMainServer_Click(object sender, EventArgs e)
         {
             MainServer.CancellationToken.Dispose();
@@ -418,6 +364,7 @@ namespace yazlab_multithreading_project
         private void btnStopMainServer_Click(object sender, EventArgs e)
         {
             MainServer.CancellationToken.Cancel();
+            timer1.Stop();
         }
     }
 }

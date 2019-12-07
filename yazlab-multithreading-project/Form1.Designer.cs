@@ -32,19 +32,17 @@
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStopRequest = new System.Windows.Forms.Button();
             this.myFlow = new System.Windows.Forms.FlowLayoutPanel();
-            this.myConsole = new System.Windows.Forms.RichTextBox();
-            this.mainServerProgress = new System.Windows.Forms.ProgressBar();
+            this.myFlow2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.myConsole2 = new System.Windows.Forms.RichTextBox();
+            this.myConsole = new System.Windows.Forms.RichTextBox();
             this.lblSubServers = new System.Windows.Forms.Label();
             this.lblMainServer = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.lblTotalRequest = new System.Windows.Forms.Label();
-            this.myFlow2 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnStartMainServer = new System.Windows.Forms.Button();
             this.btnStopMainServer = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.myFlow.SuspendLayout();
-            this.myFlow2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,28 +75,22 @@
             this.myFlow.Size = new System.Drawing.Size(914, 727);
             this.myFlow.TabIndex = 1;
             // 
-            // myConsole
+            // myFlow2
             // 
-            this.myConsole.BackColor = System.Drawing.SystemColors.MenuText;
-            this.myConsole.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.myConsole.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.myConsole.HideSelection = false;
-            this.myConsole.Location = new System.Drawing.Point(0, 3);
-            this.myConsole.Name = "myConsole";
-            this.myConsole.Size = new System.Drawing.Size(424, 264);
-            this.myConsole.TabIndex = 0;
-            this.myConsole.Text = "";
-            this.myConsole.UseWaitCursor = true;
+            this.myFlow2.AutoScroll = true;
+            this.myFlow2.Location = new System.Drawing.Point(3, 3);
+            this.myFlow2.Name = "myFlow2";
+            this.myFlow2.Size = new System.Drawing.Size(470, 724);
+            this.myFlow2.TabIndex = 0;
             // 
-            // mainServerProgress
+            // panel1
             // 
-            this.mainServerProgress.AccessibleName = "Main";
-            this.mainServerProgress.Location = new System.Drawing.Point(3, 3);
-            this.mainServerProgress.Maximum = 10000;
-            this.mainServerProgress.Name = "mainServerProgress";
-            this.mainServerProgress.Size = new System.Drawing.Size(467, 55);
-            this.mainServerProgress.TabIndex = 0;
-            this.mainServerProgress.Tag = "Main Server";
+            this.panel1.Controls.Add(this.myConsole2);
+            this.panel1.Controls.Add(this.myConsole);
+            this.panel1.Location = new System.Drawing.Point(479, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(424, 598);
+            this.panel1.TabIndex = 3;
             // 
             // myConsole2
             // 
@@ -111,6 +103,19 @@
             this.myConsole2.Size = new System.Drawing.Size(424, 264);
             this.myConsole2.TabIndex = 1;
             this.myConsole2.Text = "";
+            // 
+            // myConsole
+            // 
+            this.myConsole.BackColor = System.Drawing.SystemColors.MenuText;
+            this.myConsole.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.myConsole.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.myConsole.HideSelection = false;
+            this.myConsole.Location = new System.Drawing.Point(0, 3);
+            this.myConsole.Name = "myConsole";
+            this.myConsole.Size = new System.Drawing.Size(424, 264);
+            this.myConsole.TabIndex = 0;
+            this.myConsole.Text = "";
+            this.myConsole.UseWaitCursor = true;
             // 
             // lblSubServers
             // 
@@ -144,15 +149,6 @@
             this.lblTotalRequest.TabIndex = 6;
             this.lblTotalRequest.Text = "Total";
             // 
-            // myFlow2
-            // 
-            this.myFlow2.AutoScroll = true;
-            this.myFlow2.Controls.Add(this.mainServerProgress);
-            this.myFlow2.Location = new System.Drawing.Point(3, 3);
-            this.myFlow2.Name = "myFlow2";
-            this.myFlow2.Size = new System.Drawing.Size(470, 724);
-            this.myFlow2.TabIndex = 0;
-            // 
             // btnStartMainServer
             // 
             this.btnStartMainServer.Location = new System.Drawing.Point(933, 77);
@@ -173,15 +169,6 @@
             this.btnStopMainServer.UseVisualStyleBackColor = true;
             this.btnStopMainServer.Click += new System.EventHandler(this.btnStopMainServer_Click);
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.myConsole2);
-            this.panel1.Controls.Add(this.myConsole);
-            this.panel1.Location = new System.Drawing.Point(479, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(424, 598);
-            this.panel1.TabIndex = 3;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -200,7 +187,6 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.myFlow.ResumeLayout(false);
-            this.myFlow2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -212,7 +198,6 @@
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnStopRequest;
         private System.Windows.Forms.FlowLayoutPanel myFlow;
-        private System.Windows.Forms.ProgressBar mainServerProgress;
         private System.Windows.Forms.RichTextBox myConsole;
         private System.Windows.Forms.RichTextBox myConsole2;
         private System.Windows.Forms.Label lblSubServers;
