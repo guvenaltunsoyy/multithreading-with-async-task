@@ -1,3 +1,5 @@
+***c# windows forms app***
+
 # Proje bileşenlerinin özellikleri:
 ### 1) Ana Sunucu (Main Thread): 10000 istek kapasitesine sahiptir. 500 ms zaman
 ### aralıklarıyla [1-100] arasında rastgele sayıda istek kabul etmektedir. İstek olduğu
